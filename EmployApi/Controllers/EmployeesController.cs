@@ -1,4 +1,5 @@
-﻿using EmployApi.Models;
+﻿using EmployApi.Logic;
+using EmployApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,9 +10,8 @@ namespace EmployApi.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly EmployDbContext dbContext;
+        /*private readonly EmployDbContext dbContext;
 
-        //EmployDbContext dbContext = new EmployDbContext();
 
         public EmployeesController(EmployDbContext dbContext)
         {
@@ -57,6 +57,41 @@ namespace EmployApi.Controllers
             dbContext.Employees.Remove(emp);
             dbContext.SaveChanges();
             return true;
+        }
+        */
+
+
+
+        private readonly IEmployeeLogic employeeLogic;
+
+        public EmployeesController(IEmployeeLogic employeeLogic)
+        {
+            this.employeeLogic = employeeLogic;
+        }
+
+        [HttpGet]
+        public List<Employee> GetAllEmployees()
+        {
+           return employeeLogic.GetAllEmployees();
+        }
+
+        [HttpPost]
+
+        public bool InsertEmployee(Employee employee)
+        {
+           return employeeLogic.InsertEmployee(employee);
+        }
+
+        [HttpPut]
+        public bool UpdateEmployee(Employee employee)
+        {
+           return employeeLogic.UpdateEmployee(employee);
+        }
+
+        [HttpDelete]
+        public bool DeleteEmployee(int id)
+        {
+           return employeeLogic.DeleteEmployee(id);
         }
 
 
